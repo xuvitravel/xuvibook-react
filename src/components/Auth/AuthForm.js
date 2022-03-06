@@ -7,8 +7,10 @@ import classes from "./AuthForm.module.css";
 
 const AuthForm = () => {
   const history = useHistory();
-  const emailInputRef = useRef();
-  const passwordInputRef = useRef();
+  const email_input_ref = useRef();
+  const password_input_ref = useRef();
+  const name_input_ref = useRef();
+  const password_confirmation_input_ref = useRef();
 
   const authCtx = useContext(AuthContext);
 
@@ -18,27 +20,25 @@ const AuthForm = () => {
     setIsLogin((prevState) => !prevState);
   };
 
-  const submitHandler = (event) => {
+  const login_submit_handler = (event) => {
     event.preventDefault();
 
-    const enteredEmail = emailInputRef.current.value;
-    const enteredPassword = passwordInputRef.current.value;
+    const entered_email = email_input_ref.current.value;
+    const entered_password = password_input_ref.current.value;
     //Optional: Add validation
     setIsLoading(true);
     let url;
 
     if (isLogin) {
-      url =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyBzKF4eyZEw-UKcaeEbP_lAF6jB-tfM7NM";
+      url = "http://127.0.0.1:8000/api";
     } else {
-      url =
-        "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyBzKF4eyZEw-UKcaeEbP_lAF6jB-tfM7NM";
+      url = "http://127.0.0.1:8000/api/register";
     }
     fetch(url, {
       method: "POST",
       body: JSON.stringify({
-        email: enteredEmail,
-        password: enteredPassword,
+        email: entered_email,
+        password: entered_password,
         returnSecureToken: true,
       }),
       headers: {
@@ -71,38 +71,133 @@ const AuthForm = () => {
         alert(err.message);
       });
   };
+  const register_submit_handler = (event) => {
+    event.preventDefault();
 
+    const entered_email = email_input_ref.current.value;
+    const entered_password = password_input_ref.current.value;
+    const entered_name = name_input_ref.current.value;
+    const entered_password_confirmation = password_input_ref.current.value;
+    //Optional: Add validation
+    setIsLoading(true);
+    let url;
+
+    url = "http://127.0.0.1:8000/api/register";
+
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify({
+        name: entered_name,
+        email: entered_email,
+        password: entered_password,
+        password_confirmation: entered_password_confirmation,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((res) => {
+        setIsLoading(false);
+        if (res.ok) {
+          return res.json();
+        } else {
+          return res.json().then((data) => {
+            // Show an error modal
+            let errorMessage = "Authentication failed";
+            if (data && data.error && data.error.message) {
+              errorMessage = data.error.message;
+            }
+            throw new Error(errorMessage);
+          });
+        }
+      })
+      .then((data) => {
+        //improve: Throw a ssucces message
+        if (data.success) {
+          switchAuthModeHandler();
+        }
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  };
   return (
     <section className={classes.auth}>
       <h1>{isLogin ? "Login" : "Sign Up"}</h1>
-      <form onSubmit={submitHandler}>
-        <div className={classes.control}>
-          <label htmlFor="email">Your Email</label>
-          <input type="email" id="email" required ref={emailInputRef} />
-        </div>
-        <div className={classes.control}>
-          <label htmlFor="password">Your Password</label>
-          <input
-            type="password"
-            id="password"
-            required
-            ref={passwordInputRef}
-          />
-        </div>
-        <div className={classes.actions}>
-          {!isLoading && (
-            <button>{isLogin ? "Login" : "Create Account"}</button>
-          )}
-          {isLoading && <p>Sending request...</p>}
-          <button
-            type="button"
-            className={classes.toggle}
-            onClick={switchAuthModeHandler}
-          >
-            {isLogin ? "Create new account" : "Login with existing account"}
-          </button>
-        </div>
-      </form>
+      {isLogin && (
+        <form onSubmit={login_submit_handler}>
+          <div className={classes.control}>
+            <label htmlFor="email">Your Email</label>
+            <input type="email" id="email" required ref={email_input_ref} />
+          </div>
+          <div className={classes.control}>
+            <label htmlFor="password">Your Password</label>
+            <input
+              type="password"
+              id="password"
+              required
+              ref={password_input_ref}
+            />
+          </div>
+          <div className={classes.actions}>
+            {!isLoading && <button>{"Login"}</button>}
+            {isLoading && <p>Sending request...</p>}
+            <button
+              type="button"
+              className={classes.toggle}
+              onClick={switchAuthModeHandler}
+            >
+              {"Create new account"}
+            </button>
+          </div>
+        </form>
+      )}
+      {!isLogin && (
+        <form onSubmit={register_submit_handler}>
+          <div className={classes.control}>
+            <label htmlFor="name">Your Name</label>
+            <input
+              type="name"
+              id="name"
+              required
+              ref={name_input_ref}
+            />
+          </div>
+          <div className={classes.control}>
+            <label htmlFor="email">Your Email</label>
+            <input type="email" id="email" required ref={email_input_ref} />
+          </div>
+          <div className={classes.control}>
+            <label htmlFor="password">Your Password</label>
+            <input
+              type="password"
+              id="password"
+              required
+              ref={password_input_ref}
+            />
+          </div>
+          <div className={classes.control}>
+            <label htmlFor="password_confirmation">Your Password Confirmation</label>
+            <input
+              type="password_confirmation"
+              id="password_confirmation"
+              required
+              ref={password_confirmation_input_ref}
+            />
+          </div>
+          <div className={classes.actions}>
+            {!isLoading && <button>{"Register"}</button>}
+            {isLoading && <p>Sending request...</p>}
+            <button
+              type="button"
+              className={classes.toggle}
+              onClick={switchAuthModeHandler}
+            >
+              {"Create new account"}
+            </button>
+          </div>
+        </form>
+      )}
     </section>
   );
 };

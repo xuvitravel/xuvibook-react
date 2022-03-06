@@ -8,13 +8,13 @@ const ProfileForm = () => {
   const newPasswordInputRef = useRef();
   const authCtx = useContext(AuthContext);
 
-  const submitHandler = (event) => {
+  const submit_handler = (event) => {
     event.preventDefault();
 
     const enteredNewPassword = newPasswordInputRef.current.value;
     //add validation
     fetch(
-      "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyBzKF4eyZEw-UKcaeEbP_lAF6jB-tfM7NM",
+      "http://127.0.0.1:8000/api",
       {
         method: "POST",
         body: JSON.stringify({
@@ -32,7 +32,7 @@ const ProfileForm = () => {
     });
   };
   return (
-    <form className={classes.form} onSubmit={submitHandler}>
+    <form className={classes.form} onSubmit={submit_handler}>
       <div className={classes.control}>
         <label htmlFor="new-password">New Password</label>
         <input
