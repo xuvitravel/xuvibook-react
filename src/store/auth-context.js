@@ -5,28 +5,29 @@ let logoutTimer;
 const AuthContext = React.createContext({
   token: "",
   isLoggedIn: false,
-  login: (token) => {},
+  login: (token, expires_in) => {},
   logout: () => {},
 });
 
-const calculateRemainingTime = (expirationTime) => {
+const calculateRemainingTime = (expires_in) => {
   const currentTime = new Date().getTime();
-  const adjExpirationTime = new Date(expirationTime).getTime();
+  const adjexpires_in = new Date(expires_in).getTime();
 
-  const remainingDuration = adjExpirationTime - currentTime;
+  const remainingDuration = adjexpires_in - currentTime;
 
   return remainingDuration;
 };
 
 const retrieveStoredToken = () => {
   const storedToken = localStorage.getItem("token");
-  const storedExpirationDate = localStorage.getItem("expirationTime");
+  const storedExpirationDate = localStorage.getItem("expires_in");
 
   const remainingTime = calculateRemainingTime(storedExpirationDate);
+  // remainingTime = storedExpirationDate;
 
   if (remainingTime <= 3600) {
     localStorage.removeItem("token");
-    localStorage.removeItem("expirationTime");
+    localStorage.removeItem("expires_in");
     return null;
   }
 
@@ -51,21 +52,21 @@ export const AuthContextProvider = (props) => {
   const logoutHandler = useCallback(() => {
     setToken(null);
     localStorage.removeItem("token");
-    localStorage.removeItem("expirationTime");
+    localStorage.removeItem("expires_in");
 
     if (logoutTimer) {
       clearTimeout(logoutTimer);
     }
   }, []);
 
-  const loginHandler = (token, expirationTime) => {
+  const loginHandler = (token, expires_in) => {
     setToken(token);
     localStorage.setItem("token", token);
-    localStorage.setItem("expirationTime", expirationTime);
+    localStorage.setItem("expires_in", expires_in);
 
-    const remainingTime = calculateRemainingTime(expirationTime);
+    // const remainingTime = calculateRemainingTime(expires_in);
 
-    logoutTimer = setTimeout(logoutHandler, remainingTime);
+    // logoutTimer = setTimeout(logoutHandler, remainingTime);
   };
 
   useEffect(() => {

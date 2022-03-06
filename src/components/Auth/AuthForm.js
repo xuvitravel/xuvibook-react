@@ -28,18 +28,14 @@ const AuthForm = () => {
     //Optional: Add validation
     setIsLoading(true);
     let url;
+    url = "http://api.book.xuvi.vn/api/login";
 
-    if (isLogin) {
-      url = "http://127.0.0.1:8000/api";
-    } else {
-      url = "http://127.0.0.1:8000/api/register";
-    }
     fetch(url, {
       method: "POST",
       body: JSON.stringify({
         email: entered_email,
         password: entered_password,
-        returnSecureToken: true,
+        "remember-me": true,
       }),
       headers: {
         "Content-Type": "application/json",
@@ -61,10 +57,11 @@ const AuthForm = () => {
         }
       })
       .then((data) => {
-        const expirationTime = new Date(
-          new Date().getTime() + +data.expiresIn * 1000
-        );
-        authCtx.login(data.idToken, expirationTime.toISOString());
+        // const expirationTime = new Date(
+        //   new Date().getTime() + +data.expiresIn * 1000
+        // );
+        // authCtx.login(data.idToken, expirationTime.toISOString());
+        authCtx.login(data.data.token, data.data.expires_in);
         history.replace("/book");
       })
       .catch((err) => {
@@ -77,12 +74,12 @@ const AuthForm = () => {
     const entered_email = email_input_ref.current.value;
     const entered_password = password_input_ref.current.value;
     const entered_name = name_input_ref.current.value;
-    const entered_password_confirmation = password_input_ref.current.value;
+    const entered_password_confirmation = password_confirmation_input_ref.current.value;
     //Optional: Add validation
     setIsLoading(true);
     let url;
 
-    url = "http://127.0.0.1:8000/api/register";
+    url = "http://api.book.xuvi.vn/api/register";
 
     fetch(url, {
       method: "POST",
