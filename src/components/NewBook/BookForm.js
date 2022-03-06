@@ -15,7 +15,7 @@ const BookForm = (props) => {
   const dateChangeHandler = (event) => {
     setEnteredDate(event.target.value);
   };
-  const submitHandler = (event) => {
+  const submit_handler = (event) => {
     event.preventDefault();
 
     const bookData = {
@@ -30,7 +30,7 @@ const BookForm = (props) => {
   };
 
   return (
-    <form onSubmit={submitHandler}>
+    <form onSubmit={submit_handler}>
       <div className="new-book__controls">
         <div className="new-book__control">
           <label>Tiêu đề</label>
