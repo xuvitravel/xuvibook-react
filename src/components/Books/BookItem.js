@@ -1,14 +1,14 @@
 import BookDate from "./BookDate";
 import Card from '../UI/Card'
-import "./BookItem.css";
+import classes from "./BookItem.module.css";
 function BookItem(props) {
   return (
     <li>
-      <Card className="book-item">
+      <Card className={classes["book-item"]}>
         <BookDate date={props.date} />
-        <div className="book-item__description">
+        <div className={classes["book-item__description"]}>
           <h2>{props.title}</h2>
-          <div className="book-item__price">{props.amount} quyển</div>
+          <div className={classes["book-item__price"]}>{props.amount} quyển</div>
         </div>
       </Card>
     </li>

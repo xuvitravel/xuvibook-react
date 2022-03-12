@@ -1,14 +1,14 @@
 import React from 'react';
 
-import './BooksFilter.css';
+import classes from './BooksFilter.module.css';
 
 const BooksFilter = (props) => {
   const dropBoxChangeHandler = (event) => {
     props.onYearFilter(event.target.value)
   }
   return (
-    <div className='books-filter'>
-      <div className='books-filter__control'>
+    <div className={classes['books-filter']}>
+      <div className={classes['books-filter__control']}>
         <label>Filter by year</label>
         <select value={props.yearSelected} onChange={dropBoxChangeHandler}>
           <option value='2022'>2022</option>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Books from "../components/Books/Books";
-import NewBook from "../components/NewBook/NewBook";
+import NewBook from "../components/Books/NewBook";
 const BOOKSBORROWED = [
   {
     id: "b1",
