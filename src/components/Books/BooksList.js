@@ -1,13 +1,13 @@
 import BookItem from "./BookItem";
-import "./BooksList.css";
+import classes from "./BooksList.module.css";
 
 const BooksList = (props) => {
   if (props.items.length === 0) {
-    return <h2 className="books-list__fallback">Không tìm thấy sách.</h2>;
+    return <h2 className={classes["books-list__fallback"]}>Không tìm thấy sách.</h2>;
   }
 
   return (
-    <ul className="books-list">
+    <ul className={classes["books-list"]}>
       {props.items.map((book) => (
         <BookItem
           key={book.id}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import BookForm from "./BookForm";
 
-import "./NewBook.css";
+import classes from "./NewBook.module.css";
 const NewBook = (props) => {
   const [isEditing, setIsEditing] = useState(false);
   const saveBookDataHandler = (enteredBookData) => {
@@ -21,7 +21,7 @@ const NewBook = (props) => {
   };
 
   return (
-    <div className="new-book">
+    <div className={classes["new-book"]}>
       {!isEditing && (
         <button onClick={startEditingHandler}>Thêm sách vào thư viện</button>
       )}

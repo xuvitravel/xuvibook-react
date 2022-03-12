@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "./BookForm.css";
+import classes from "./BookForm.module.css";
 
 const BookForm = (props) => {
   const [enteredTitle, setEnteredTitle] = useState("");
@@ -31,8 +31,8 @@ const BookForm = (props) => {
 
   return (
     <form onSubmit={submit_handler}>
-      <div className="new-book__controls">
-        <div className="new-book__control">
+      <div className={classes["new-book__controls"]}>
+        <div className={classes["new-book__control"]}>
           <label>Tiêu đề</label>
           <input
             type="text"
@@ -40,7 +40,7 @@ const BookForm = (props) => {
             onChange={titleChangeHandler}
           />
         </div>
-        <div className="new-book__control">
+        <div className={classes["new-book__control"]}>
           <label>Số lượng</label>
           <input
             type="number"
@@ -48,12 +48,12 @@ const BookForm = (props) => {
             onChange={amountChangeHandler}
           />
         </div>
-        <div className="new-book__control">
+        <div className={classes["new-book__control"]}>
           <label>Ngày</label>
           <input type="date" value={enteredDate} onChange={dateChangeHandler} />
         </div>
       </div>
-      <div className="new-book__actions">
+      <div className={classes["new-book__actions"]}>
         <button type="button" onClick={props.onCancel}>
           Hủy
         </button>
