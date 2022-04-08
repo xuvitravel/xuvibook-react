@@ -1,32 +1,23 @@
-import { useState } from "react";
+import { useRef } from "react/cjs/react.production.min";
 import classes from "./BookForm.module.css";
 
 const BookForm = (props) => {
-  const [enteredTitle, setEnteredTitle] = useState("");
-  const [enteredAmount, setEnteredAmount] = useState("");
-  const [enteredDate, setEnteredDate] = useState("");
+  const titleInputRef = useRef();
+  const amountInputRef = useRef();
+  const dateInputRef = useRef();
 
-  const titleChangeHandler = (event) => {
-    setEnteredTitle(event.target.value);
-  };
-  const amountChangeHandler = (event) => {
-    setEnteredAmount(event.target.value);
-  };
-  const dateChangeHandler = (event) => {
-    setEnteredDate(event.target.value);
-  };
   const submit_handler = (event) => {
     event.preventDefault();
 
     const bookData = {
-      title: enteredTitle,
-      amount: +enteredAmount,
-      date: new Date(enteredDate),
+      title: titleInputRef.current.value,
+      amount: +amountInputRef.current.value,
+      date: new Date(dateInputRef.current.value),
     };
     props.onSaveBookData(bookData);
-    setEnteredTitle('');
-    setEnteredAmount('');
-    setEnteredDate('');
+    titleInputRef.current.value = "";
+    amountInputRef.current.value = "";
+    dateInputRef.current.value = "";
   };
 
   return (
@@ -34,32 +25,22 @@ const BookForm = (props) => {
       <div className={classes["new-book__controls"]}>
         <div className={classes["new-book__control"]}>
           <label>Tiêu đề</label>
-          <input
-            type="text"
-            value={enteredTitle}
-            onChange={titleChangeHandler}
-          />
+          <input type="text" ref={titleInputRef} />
         </div>
         <div className={classes["new-book__control"]}>
           <label>Số lượng</label>
-          <input
-            type="number"
-            value={enteredAmount}
-            onChange={amountChangeHandler}
-          />
+          <input type="number" ref={amountInputRef} />
         </div>
         <div className={classes["new-book__control"]}>
           <label>Ngày</label>
-          <input type="date" value={enteredDate} onChange={dateChangeHandler} />
+          <input type="date" ref={dateInputRef} />
         </div>
       </div>
       <div className={classes["new-book__actions"]}>
         <button type="button" onClick={props.onCancel}>
           Hủy
         </button>
-        <button type="submit">
-          Thêm sách
-        </button>
+        <button type="submit">Thêm sách</button>
       </div>
     </form>
   );

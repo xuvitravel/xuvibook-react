@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import classes from "./Books.module.css";
 import Card from "../UI/Card";
 import BooksFilter from "./BooksFilter";
@@ -18,7 +18,7 @@ function Books(props) {
   });
 
   return (
-    <div>
+    <Fragment>
       <Card className={classes["books"]}>
         <h2>{props.title}</h2>
         <BooksFilter
@@ -28,7 +28,7 @@ function Books(props) {
         <BooksList items={filteredBooks} />
         {/* <BooksChart books={filteredBooks} /> */}
       </Card>
-    </div>
+    </Fragment>
   );
 }
 

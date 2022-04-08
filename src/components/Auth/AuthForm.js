@@ -1,7 +1,8 @@
-import { useState, useRef, useContext } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
 
 import AuthContext from "../../store/auth-context";
+import ErrorModal from "../UI/ErrorModal";
 
 import classes from "./AuthForm.module.css";
 
@@ -16,10 +17,14 @@ const AuthForm = () => {
 
   const [isLogin, setIsLogin] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
+
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
   };
-
+  const errorHandler = () => {
+    setError(null);
+  };
   const login_submit_handler = (event) => {
     event.preventDefault();
 
@@ -65,7 +70,8 @@ const AuthForm = () => {
         history.replace("/book");
       })
       .catch((err) => {
-        alert(err.message);
+        // alert(err.message);
+        setError(err);
       });
   };
   const register_submit_handler = (event) => {
@@ -74,7 +80,8 @@ const AuthForm = () => {
     const entered_email = email_input_ref.current.value;
     const entered_password = password_input_ref.current.value;
     const entered_name = name_input_ref.current.value;
-    const entered_password_confirmation = password_confirmation_input_ref.current.value;
+    const entered_password_confirmation =
+      password_confirmation_input_ref.current.value;
     //Optional: Add validation
     setIsLoading(true);
     let url;
@@ -115,87 +122,93 @@ const AuthForm = () => {
         }
       })
       .catch((err) => {
-        alert(err.message);
+        setError(err);
       });
   };
   return (
-    <section className={classes.auth}>
-      <h1>{isLogin ? "Login" : "Sign Up"}</h1>
-      {isLogin && (
-        <form onSubmit={login_submit_handler}>
-          <div className={classes.control}>
-            <label htmlFor="email">Your Email</label>
-            <input type="email" id="email" required ref={email_input_ref} />
-          </div>
-          <div className={classes.control}>
-            <label htmlFor="password">Your Password</label>
-            <input
-              type="password"
-              id="password"
-              required
-              ref={password_input_ref}
-            />
-          </div>
-          <div className={classes.actions}>
-            {!isLoading && <button>{"Login"}</button>}
-            {isLoading && <p>Sending request...</p>}
-            <button
-              type="button"
-              className={classes.toggle}
-              onClick={switchAuthModeHandler}
-            >
-              {"Create new account"}
-            </button>
-          </div>
-        </form>
+    <React.Fragment>
+      {error && (
+        <ErrorModal
+          title={error.title}
+          message={error.message}
+          onConfirm={errorHandler}
+        />
       )}
-      {!isLogin && (
-        <form onSubmit={register_submit_handler}>
-          <div className={classes.control}>
-            <label htmlFor="name">Your Name</label>
-            <input
-              type="name"
-              id="name"
-              required
-              ref={name_input_ref}
-            />
-          </div>
-          <div className={classes.control}>
-            <label htmlFor="email">Your Email</label>
-            <input type="email" id="email" required ref={email_input_ref} />
-          </div>
-          <div className={classes.control}>
-            <label htmlFor="password">Your Password</label>
-            <input
-              type="password"
-              id="password"
-              required
-              ref={password_input_ref}
-            />
-          </div>
-          <div className={classes.control}>
-            <label htmlFor="password_confirmation">Your Password Confirmation</label>
-            <input
-              type="password_confirmation"
-              id="password_confirmation"
-              required
-              ref={password_confirmation_input_ref}
-            />
-          </div>
-          <div className={classes.actions}>
-            {!isLoading && <button>{"Register"}</button>}
-            {isLoading && <p>Sending request...</p>}
-            <button
-              type="button"
-              className={classes.toggle}
-              onClick={switchAuthModeHandler}
-            >
-              {"Create new account"}
-            </button>
-          </div>
-        </form>
-      )}
-    </section>
+      <section className={classes.auth}>
+        <h1>{isLogin ? "Login" : "Sign Up"}</h1>
+        {isLogin && (
+          <form onSubmit={login_submit_handler}>
+            <div className={classes.control}>
+              <label htmlFor="email">Your Email</label>
+              <input type="email" id="email" required ref={email_input_ref} />
+            </div>
+            <div className={classes.control}>
+              <label htmlFor="password">Your Password</label>
+              <input
+                type="password"
+                id="password"
+                required
+                ref={password_input_ref}
+              />
+            </div>
+            <div className={classes.actions}>
+              {!isLoading && <button>{"Login"}</button>}
+              {isLoading && <p>Sending request...</p>}
+              <button
+                type="button"
+                className={classes.toggle}
+                onClick={switchAuthModeHandler}
+              >
+                {"Create new account"}
+              </button>
+            </div>
+          </form>
+        )}
+        {!isLogin && (
+          <form onSubmit={register_submit_handler}>
+            <div className={classes.control}>
+              <label htmlFor="name">Your Name</label>
+              <input type="name" id="name" required ref={name_input_ref} />
+            </div>
+            <div className={classes.control}>
+              <label htmlFor="email">Your Email</label>
+              <input type="email" id="email" required ref={email_input_ref} />
+            </div>
+            <div className={classes.control}>
+              <label htmlFor="password">Your Password</label>
+              <input
+                type="password"
+                id="password"
+                required
+                ref={password_input_ref}
+              />
+            </div>
+            <div className={classes.control}>
+              <label htmlFor="password_confirmation">
+                Your Password Confirmation
+              </label>
+              <input
+                type="password_confirmation"
+                id="password_confirmation"
+                required
+                ref={password_confirmation_input_ref}
+              />
+            </div>
+            <div className={classes.actions}>
+              {!isLoading && <button>{"Register"}</button>}
+              {isLoading && <p>Sending request...</p>}
+              <button
+                type="button"
+                className={classes.toggle}
+                onClick={switchAuthModeHandler}
+              >
+                {"Already have account"}
+              </button>
+            </div>
+          </form>
+        )}
+      </section>
+    </React.Fragment>
   );
 };
 
