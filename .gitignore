@@ -1,4 +1,5 @@
 /node_modules
 /.vscode
 /build
-package-lock.json
+/package-lock.json
+/src/config.js

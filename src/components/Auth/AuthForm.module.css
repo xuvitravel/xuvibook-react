@@ -24,6 +24,7 @@
   color: white;
   font-weight: bold;
   margin-bottom: 0.5rem;
+  text-align: left;
 }
 
 .control input {
@@ -71,3 +72,4 @@
   background-color: transparent;
   color: #8d82cc;
 }
+
