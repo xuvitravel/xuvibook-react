@@ -188,7 +188,7 @@ const AuthForm = () => {
                 Your Password Confirmation
               </label>
               <input
-                type="password_confirmation"
+                type="password"
                 id="password_confirmation"
                 required
                 ref={password_confirmation_input_ref}
