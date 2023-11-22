@@ -1,10 +1,11 @@
 name: Deploy
 
 on:
-  push:
+  pull_request:
+    types:
+      - closed
     branches:
       - main
-      - 7-run-project
   workflow_dispatch:
 
 jobs:
