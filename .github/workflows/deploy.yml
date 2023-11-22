@@ -1,9 +1,10 @@
 name: Deploy
 
 on:
-  #   push:
-  #     branches:
-  #       - main
+  push:
+    branches:
+      - main
+      - 7-run-project
   workflow_dispatch:
 
 jobs:
