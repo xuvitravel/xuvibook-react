@@ -1,41 +1,25 @@
-import { useContext } from "react";
-import { Switch, Route, Redirect } from "react-router-dom";
+import { RouterProvider } from "react-router-dom";
 
-import Layout from "./components/Layout/Layout";
-import UserProfile from "./components/Profile/UserProfile";
-import AuthPage from "./pages/AuthPage";
-import BookPage from "./pages/BookPage";
-import HomePage from "./pages/HomePage";
-import AuthContext from "./store/auth-context";
+import { QueryClient, QueryClientProvider } from "react-query";
+import route from "./route/route";
+import "./App.css";
+import { Provider } from "react-redux";
+import store, { persistor } from "./redux/store";
+import { PersistGate } from "redux-persist/integration/react";
+
+const queryClient = new QueryClient();
 
 function App() {
-  const authCtx = useContext(AuthContext);
-  
   return (
-    <Layout>
-      <Switch>
-        <Route path="/" exact>
-          <HomePage />
-        </Route>
-        {!authCtx.isLoggedIn && (
-          <Route path="/auth">
-            <AuthPage />
-          </Route>
-        )}
-        {authCtx.isLoggedIn && (
-          <Route path="/book">
-            <BookPage />
-          </Route>
-        )}
-        <Route path="/profile">
-          {authCtx.isLoggedIn && <UserProfile />}
-          {!authCtx.isLoggedIn && <Redirect to="/auth" />}
-        </Route>
-        <Route path="*">
-          <Redirect to="/" />
-        </Route>
-      </Switch>
-    </Layout>
+    <>
+      <QueryClientProvider client={queryClient}>
+        <Provider store={store}>
+          <PersistGate loading={null} persistor={persistor}>
+            <RouterProvider router={route}></RouterProvider>
+          </PersistGate>
+        </Provider>
+      </QueryClientProvider>
+    </>
   );
 }
 

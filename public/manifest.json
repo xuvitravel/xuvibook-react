@@ -1,6 +1,6 @@
 {
-  "short_name": "XuVi book",
-  "name": "Thư viện ở mọi nơi",
+  "short_name": "XuviBook",
+  "name": "Create React App Sample",
   "icons": [
     {
       "src": "favicon.ico",
