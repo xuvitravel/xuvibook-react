@@ -1,11 +1,16 @@
 name: Deploy
 
 on:
+  push:
+    branches:
+      - main
+      - 17-unexpected-application-error
   pull_request:
     types:
       - closed
     branches:
       - main
+      - 17-unexpected-application-error
   workflow_dispatch:
 
 jobs:
@@ -38,7 +43,7 @@ jobs:
     name: Deploy
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    # if: github.ref == 'refs/heads/main'
 
     steps:
       - name: Download artifact
