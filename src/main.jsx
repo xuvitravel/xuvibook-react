@@ -6,7 +6,7 @@ import "./index.css";
 import NewPost, { action as newPostAction } from "./routes/NewPost";
 import RootLayout from "./routes/RootLayout";
 import Posts, { loader as postsLoader } from "./routes/Posts";
-import PostDetails, {loader as postDetailsLoader}  from "./routes/PostDetails";
+import PostDetails, { loader as postDetailsLoader } from "./routes/PostDetails";
 
 const Router = createBrowserRouter([
   {

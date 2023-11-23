@@ -15,6 +15,9 @@ export default Posts;
 
 export async function loader() {
   const response = await fetch("http://localhost:8080/posts");
+  // if (!response.ok) {
+  //   throw new Error("Something went wrong!");
+  // }
   const responseData = await response.json();
   return responseData.posts;
 }

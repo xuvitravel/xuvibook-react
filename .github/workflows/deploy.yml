@@ -1,59 +1,56 @@
-name: Deploy
-
+name: Deployment
 on:
   push:
     branches:
-      - main
-      - 17-unexpected-application-error
-  pull_request:
-    types:
-      - closed
-    branches:
-      - main
+      # - main
       - 17-unexpected-application-error
   workflow_dispatch:
-
 jobs:
+  # test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Get code
+  #       uses: actions/checkout@v3
+  #     - name: Load & cache dependencies
+  #       uses: ./.github/actions/cached-deps
+  #     - name: Test code
+  #       id: run-tests
+  #       run: npm run test
+  #     - name: Upload test report
+  #       if: failure() && steps.run-tests.outcome == 'failure'
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: test-report
+  #         path: test.json
   build:
-    name: Build
+    # needs: test
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v2
-
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: 20
-
-      - name: Install dependencies
-        uses: bahmutov/npm-install@v1
-
-      - name: Build project
+      - name: Get code
+        uses: actions/checkout@v3
+      - name: Load & cache dependencies
+        uses: ./.github/actions/cached-deps
+      - name: Build website
         run: npm run build
-
-      - name: Upload production-ready build files
-        uses: actions/upload-artifact@v2
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v3
         with:
-          name: production-files
-          path: ./dist
-
-  deploy:
-    name: Deploy
+          name: dist-files
+          path: dist
+  web-deploy:
+    name: 🎉 Deploy
     needs: build
     runs-on: ubuntu-latest
-    # if: github.ref == 'refs/heads/main'
-
     steps:
-      - name: Download artifact
-        uses: actions/download-artifact@v2
+      - name: Get build artifacts
+        uses: actions/download-artifact@v3
         with:
-          name: production-files
+          name: dist-files
           path: ./dist
-
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./dist/
